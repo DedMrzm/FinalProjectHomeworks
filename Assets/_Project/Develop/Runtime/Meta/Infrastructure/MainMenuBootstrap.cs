@@ -37,13 +37,13 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             {
                 SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
                 ICoroutinesPerfomer coroutinesPerfomer = _container.Resolve<ICoroutinesPerfomer>();
-                coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay));
+                coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(GameModes.Chars)));
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
                 ICoroutinesPerfomer coroutinesPerfomer = _container.Resolve<ICoroutinesPerfomer>();
-                coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay));
+                coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(GameModes.Digits)));
             }
         }
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
-    [CreateAssetMenu(fileName = "GameplayInputArgs", menuName = "Gameplay")]
+    [CreateAssetMenu(menuName = "Configs/Gameplay/LevelConfig", fileName = "LevelConfig")]
     public class GameplayInputArgsConfig : ScriptableObject
     {
         [field: SerializeField] public GameModes GameMode { get; private set; }

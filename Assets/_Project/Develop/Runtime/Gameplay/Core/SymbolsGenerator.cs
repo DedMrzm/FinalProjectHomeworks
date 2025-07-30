@@ -33,6 +33,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
 
         public string Generate()
         {
+            _correctAnswer = "";
             for(int i = 0; i < 3; i++)
             {
                 _correctAnswer += string.Concat(_gameModes[_pickedGameMode][Random.Range(0, _gameModes[_pickedGameMode].Length-1)]);

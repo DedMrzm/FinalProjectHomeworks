@@ -23,7 +23,7 @@ public class GameplayCycle
     private string _correctAnswer;
     private int _counter = 0;
 
-    private bool _isRunning;
+    private bool _isRunning = false;
 
     public GameplayCycle(DIContainer projectContainer)
     {
@@ -38,8 +38,6 @@ public class GameplayCycle
     {
         if (_isRunning == false)
             return;
-
-        Debug.Log("WORK");
 
         if (WinConditionsCompleted(_counter))
         {
@@ -67,12 +65,17 @@ public class GameplayCycle
         _counter = 0;
         Debug.Log($"Чтобы начать, введите {NextCode}");
 
-        yield return new WaitWhile(() => Input.GetKeyDown(NextCode));
+        yield return new WaitWhile(() => Input.GetKeyDown(NextCode) == false);
 
         Debug.Log("Введите набор символов, как в дебаг логе");
 
         _correctAnswer = _generator.Generate();
+
+        yield return new WaitForSeconds(0.5f);
+
         _isRunning = true;
+
+        Debug.Log("ISRUNNING: " + _isRunning);
     }
 
     public void ProcessEndGame()
@@ -84,7 +87,9 @@ public class GameplayCycle
         Debug.Log("Неправильно, проиграл");
         Debug.Log($"Нажми {RestartCode} чтобы начать заново");
 
-        yield return Input.GetKeyDown(RestartCode);
+        yield return new WaitWhile(() => Input.GetKeyDown(RestartCode) == false);
+
+        Debug.Log("Рестарт!");
 
         _coroutinesPerformer.StartPerform(Launch());
     }
@@ -95,14 +100,16 @@ public class GameplayCycle
         Debug.Log("Отлично, ты выиграл!");
         Debug.Log($"Нажми {GoToMenuCode} чтобы перейти в главное меню");
 
-        yield return Input.GetKeyDown(GoToMenuCode);
+        yield return new WaitWhile(() => Input.GetKeyDown(GoToMenuCode) == false);
 
-        _sceneSwitcher.ProcessSwitchTo(Scenes.MainMenu);
+        Debug.Log("Переход на меню");
+
+        _coroutinesPerformer.StartPerform(_sceneSwitcher.ProcessSwitchTo(Scenes.MainMenu));
     }
 
     public bool WinConditionsCompleted(int counter)
         => counter > _correctAnswer.Length - 1;
 
     public bool DefeatConditionsCompleted(int counter)
-     => _counter < _correctAnswer.Length && Input.inputString != _correctAnswer[counter].ToString() && Input.inputString != null;
+     => Input.inputString != _correctAnswer[counter].ToString() && Input.inputString != "";
 }

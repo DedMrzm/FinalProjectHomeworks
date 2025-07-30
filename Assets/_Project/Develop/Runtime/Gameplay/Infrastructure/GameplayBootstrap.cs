@@ -69,13 +69,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                SceneSwitcherService sceneSwitcherService = _projectContainer.Resolve<SceneSwitcherService>();
-                ICoroutinesPerfomer coroutinesPerfomer = _projectContainer.Resolve<ICoroutinesPerfomer>();
-                coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu));
-            }
-
             _gameplayCycle?.Update(Time.deltaTime);
         }
     }

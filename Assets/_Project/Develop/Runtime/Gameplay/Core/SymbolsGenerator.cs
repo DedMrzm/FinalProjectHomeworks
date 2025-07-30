@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
 using UnityEngine;
+using Assets._Project.Develop.Runtime.Gameplay.Configs;
+using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
+using System.Linq;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Core
 {
     public class SymbolsGenerator
     {
         private DIContainer _projectContainer;
+        private ConfigsProviderService _configsProviderService;
 
         private Dictionary<GameModes, string> _gameModes = new Dictionary<GameModes, string>()
         {
@@ -22,14 +26,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
         public SymbolsGenerator(DIContainer projectContainer)
         {
             _projectContainer = projectContainer;
-            _pickedGameMode = projectContainer.Resolve<GameModeConfig>().GameMode;
+
+            _configsProviderService = _projectContainer.Resolve<ConfigsProviderService>();
+            _pickedGameMode = _configsProviderService.GetConfig<GameModeConfig>().GameMode;
         }
 
         public string Generate()
         {
             for(int i = 0; i < 3; i++)
             {
-                _correctAnswer.Substring(_gameModes[_pickedGameMode][Random.Range(0, _gameModes[_pickedGameMode].Length-1)]);
+                _correctAnswer += string.Concat(_gameModes[_pickedGameMode][Random.Range(0, _gameModes[_pickedGameMode].Length-1)]);
             }
 
             Debug.Log("Правильный ответ: " + _correctAnswer);

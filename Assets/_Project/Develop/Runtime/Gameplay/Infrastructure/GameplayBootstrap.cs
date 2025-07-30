@@ -1,4 +1,4 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.Core;
+﻿using Assets._Project.Develop.Runtime.Gameplay.Configs;
 using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
@@ -12,17 +12,30 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
     public class GameplayBootstrap : SceneBootstrap
     {
-        private DIContainer _container;
-        private GameplayInputArgs _inputArgs;
+        private DIContainer _projectContainer;
         private ConfigsProviderService _configsProviderService;
 
-        public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
+        private GameplayInputArgs _inputArgs;
+        private CoroutinesPerformer _coroutinesPerformer;
+
+        private GameplayCycle _gameplayCycle;
+
+
+        public override void ProcessRegistrations(DIContainer projectContainer, IInputSceneArgs sceneArgs = null)
         {
-            _container = container;
+            _projectContainer = projectContainer;
 
-            _configsProviderService = _container.Resolve<ConfigsProviderService>();
+            _configsProviderService = _projectContainer.Resolve<ConfigsProviderService>();
+            _coroutinesPerformer = (CoroutinesPerformer)_projectContainer.Resolve<ICoroutinesPerfomer>();
 
-            GameplayContextRegistrations.Process(_container);
+            if (sceneArgs is not GameplayInputArgs gameplayInputArgs)
+                throw new ArgumentException($"{nameof(sceneArgs)} is not match with {typeof(GameplayInputArgs)} type");
+
+            _inputArgs = gameplayInputArgs;
+
+            Debug.Log(_inputArgs);
+
+            GameplayContextRegistrations.Process(_projectContainer);
         }
 
         public override IEnumerator Initialize()
@@ -33,7 +46,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             
             Debug.Log("Подгрузка конфигов завершена");
 
-            GameModeConfig config = _container.Resolve<GameModeConfig>();
+            GameModeConfig config = _configsProviderService.GetConfig<GameModeConfig>();
+
+            config.SetGameMode(_inputArgs.GameMode);
 
             Debug.Log($"Уровень: {config.GameMode}");
 
@@ -45,6 +60,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         public override void Run()
         {
+            _gameplayCycle = new GameplayCycle(_projectContainer);
+
+            _coroutinesPerformer.StartPerform(_gameplayCycle.Launch());
 
             Debug.Log("Старт геймплейной сцены");
         }
@@ -53,10 +71,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
-                ICoroutinesPerfomer coroutinesPerfomer = _container.Resolve<ICoroutinesPerfomer>();
+                SceneSwitcherService sceneSwitcherService = _projectContainer.Resolve<SceneSwitcherService>();
+                ICoroutinesPerfomer coroutinesPerfomer = _projectContainer.Resolve<ICoroutinesPerfomer>();
                 coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu));
             }
+
+            _gameplayCycle?.Update(Time.deltaTime);
         }
     }
 }

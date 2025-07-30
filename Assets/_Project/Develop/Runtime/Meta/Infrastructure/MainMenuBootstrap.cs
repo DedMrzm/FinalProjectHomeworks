@@ -1,4 +1,4 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.Core;
+﻿using Assets._Project.Develop.Runtime.Gameplay.Configs;
 using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;

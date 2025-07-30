@@ -1,5 +1,7 @@
-﻿using Assets._Project.Develop.Runtime.Infrastructure;
+﻿using Assets._Project.Develop.Runtime.Gameplay.Core;
+using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilitis.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilitis.SceneManagment;
 using System;
@@ -12,22 +14,28 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
     {
         private DIContainer _container;
         private GameplayInputArgs _inputArgs;
+        private ConfigsProviderService _configsProviderService;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
             _container = container;
 
-            if (sceneArgs is not GameplayInputArgs gameplayInputArgs)
-                throw new ArgumentException($"{nameof(sceneArgs)} is not match with {typeof(GameplayInputArgs)} type");
+            _configsProviderService = _container.Resolve<ConfigsProviderService>();
 
-            _inputArgs = gameplayInputArgs;
-
-            GameplayContextRegistrations.Process(_container, _inputArgs);
+            GameplayContextRegistrations.Process(_container);
         }
 
         public override IEnumerator Initialize()
         {
-            Debug.Log($"Уровень: {_inputArgs.LevelNumber}");
+            Debug.Log("Начинается подгрузка конфигов");
+
+            yield return _configsProviderService.LoadAsync();
+            
+            Debug.Log("Подгрузка конфигов завершена");
+
+            GameModeConfig config = _container.Resolve<GameModeConfig>();
+
+            Debug.Log($"Уровень: {config.GameMode}");
 
             Debug.Log("Инициализация геймплейной сцены");
 

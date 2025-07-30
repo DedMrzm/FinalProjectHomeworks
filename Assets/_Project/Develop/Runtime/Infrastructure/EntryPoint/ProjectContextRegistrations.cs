@@ -45,12 +45,12 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
 
         private static ResourcesAssetsLoader CreateResourcesAssetsLoader(DIContainer c) => new ResourcesAssetsLoader();
 
-        private static CoroutinesPerfomer CreateCoroutinesPerformer(DIContainer c)
+        private static CoroutinesPerformer CreateCoroutinesPerformer(DIContainer c)
         {
             ResourcesAssetsLoader resourcesAssetsLoader = c.Resolve<ResourcesAssetsLoader>();
 
-            CoroutinesPerfomer coroutinesPerfomerPrefab = resourcesAssetsLoader
-                .Load<CoroutinesPerfomer>("Utilities/CoroutinesPerformer");
+            CoroutinesPerformer coroutinesPerfomerPrefab = resourcesAssetsLoader
+                .Load<CoroutinesPerformer>("Utilities/CoroutinesPerformer");
 
             return Object.Instantiate(coroutinesPerfomerPrefab);
         }

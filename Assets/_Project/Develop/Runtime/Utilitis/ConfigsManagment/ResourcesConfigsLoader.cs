@@ -1,3 +1,4 @@
+using Assets._Project.Develop.Runtime.Gameplay.Core;
 using Assets._Project.Develop.Runtime.Utilitis.AssetsManagment;
 using System;
 using System.Collections;
@@ -12,7 +13,7 @@ namespace Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment
 
         private readonly Dictionary<Type, string> _configsResourcesPaths = new()
         {
-
+            {typeof(GameModeConfig), "Configs/GameModeConfig"},
         };
 
         public ResourcesConfigsLoader(ResourcesAssetsLoader resources)

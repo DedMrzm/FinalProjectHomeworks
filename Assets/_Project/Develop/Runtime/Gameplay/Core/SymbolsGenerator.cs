@@ -19,13 +19,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
 
         private string _correctAnswer;
 
-        public SymbolsGenerator(DIContainer projectContainer, GameModes pickedGameMode)
+        public SymbolsGenerator(DIContainer projectContainer)
         {
             _projectContainer = projectContainer;
-            _pickedGameMode = pickedGameMode;
+            _pickedGameMode = projectContainer.Resolve<GameModeConfig>().GameMode;
         }
 
-        public void Generate()
+        public string Generate()
         {
             for(int i = 0; i < 3; i++)
             {
@@ -33,6 +33,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
             }
 
             Debug.Log("Правильный ответ: " + _correctAnswer);
+
+            return _correctAnswer;
         }
     }
 }

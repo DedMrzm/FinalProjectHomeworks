@@ -13,7 +13,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
         private DIContainer _projectContainer;
         private ConfigsProviderService _configsProviderService;
 
-        private Dictionary<GameModes, string> _gameModes = new Dictionary<GameModes, string>()
+        private Dictionary<GameModes, string> _generatorSettings = new Dictionary<GameModes, string>()
         {
             {GameModes.Digits, "0123456789"},
             {GameModes.Chars, "abcdefghjklmnopqrstwxyz" }
@@ -36,7 +36,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
             _correctAnswer = "";
             for(int i = 0; i < 3; i++)
             {
-                _correctAnswer += string.Concat(_gameModes[_pickedGameMode][Random.Range(0, _gameModes[_pickedGameMode].Length-1)]);
+                _correctAnswer += string.Concat(_generatorSettings[_pickedGameMode][Random.Range(0, _generatorSettings[_pickedGameMode].Length-1)]);
             }
 
             Debug.Log("Правильный ответ: " + _correctAnswer);

@@ -27,8 +27,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         public override IEnumerator Initialize()
         {
-            Debug.Log($"Уровень: {_inputArgs.LevelNumber}");
-
             Debug.Log("Инициализация геймплейной сцены");
 
             yield break;

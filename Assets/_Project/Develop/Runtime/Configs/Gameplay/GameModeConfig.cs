@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets._Project.Develop.Runtime.Gameplay.Configs
+namespace Assets._Project.Develop.Runtime.Configs.Gameplay
 {
     [CreateAssetMenu(fileName = "GameModeConfig", menuName = "Gameplay")]
     public class GameModeConfig : ScriptableObject

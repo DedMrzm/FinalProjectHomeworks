@@ -1,7 +1,8 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.Configs;
+﻿using Assets._Project.Develop.Runtime.Configs.Gameplay;
 using Assets._Project.Develop.Runtime.Gameplay.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilitis.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilitis.DataManagment;
@@ -18,6 +19,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         private DIContainer _container;
 
         private WalletService _walletService;
+        private StatisticsService _statisticsService;
 
         private PlayerDataProvider _playerDataProvider;
         private ICoroutinesPerformer _coroutinesPerformer;
@@ -34,6 +36,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             Debug.Log("Инициализация сцены меню");
 
             _walletService = _container.Resolve<WalletService>();
+            _statisticsService = _container.Resolve<StatisticsService>();
 
             _playerDataProvider = _container.Resolve<PlayerDataProvider>();
             _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
@@ -48,23 +51,17 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
-                ICoroutinesPerformer coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
-                coroutinesPerformer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(2)));
-            }
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
-                ICoroutinesPerfomer coroutinesPerfomer = _container.Resolve<ICoroutinesPerfomer>();
+                ICoroutinesPerformer coroutinesPerfomer = _container.Resolve<ICoroutinesPerformer>();
                 coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(GameModes.Chars)));
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
-                ICoroutinesPerfomer coroutinesPerfomer = _container.Resolve<ICoroutinesPerfomer>();
+                ICoroutinesPerformer coroutinesPerfomer = _container.Resolve<ICoroutinesPerformer>();
                 coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(GameModes.Digits)));
             }
 
@@ -72,6 +69,16 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             {
                 _coroutinesPerformer.StartPerform(_playerDataProvider.Save());
                 Debug.Log("Сохранение было вызвано");
+            }
+
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                _statisticsService.ShowStatistics();
+            }
+
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                _statisticsService.ResetStatistics();
             }
         }
     }

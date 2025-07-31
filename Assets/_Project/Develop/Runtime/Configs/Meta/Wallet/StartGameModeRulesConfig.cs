@@ -8,6 +8,5 @@ namespace Assets._Project.Develop.Runtime.Configs.Meta.Wallet
         [field: SerializeField] public int CostOfReset { get; private set; }
         [field: SerializeField] public int PrizeForWin { get; private set; }
         [field: SerializeField] public int CostOfLose { get; private set; }
-
     }
 }

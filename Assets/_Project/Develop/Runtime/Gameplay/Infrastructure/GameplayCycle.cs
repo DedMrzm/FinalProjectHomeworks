@@ -1,7 +1,11 @@
+using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Gameplay.Core;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilitis.CoroutinesManagment;
+using Assets._Project.Develop.Runtime.Utilitis.DataManagment.DataProviders;
 using Assets._Project.Develop.Runtime.Utilitis.SceneManagment;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,12 +19,17 @@ public class GameplayCycle
     private const KeyCode RestartCode = KeyCode.Space;
     private const KeyCode GoToMenuCode = KeyCode.Space;
 
-    private DIContainer _projectContainer;
+    private DIContainer _gameplayContainer;
 
     private SymbolsGenerator _generator;
     private SceneSwitcherService _sceneSwitcher;
-    private CoroutinesPerformer _coroutinesPerformer;
+    private ICoroutinesPerformer _coroutinesPerformer;
+
     private WalletService _walletService;
+    private PlayerDataProvider _playerDataProvider;
+    private StatisticsService _statisticsService;
+    private StartGameModeRulesConfig _rulesConfig;
+    private ConfigsProviderService _configsProviderService;
 
     private string _correctAnswer;
     private int _counter = 0;
@@ -29,12 +38,17 @@ public class GameplayCycle
 
     public GameplayCycle(DIContainer projectContainer)
     {
-        _projectContainer = projectContainer;
+        _gameplayContainer = projectContainer;
 
-        _walletService = _projectContainer.Resolve<WalletService>();
-        _generator = _projectContainer.Resolve<SymbolsGenerator>();
-        _sceneSwitcher = _projectContainer.Resolve<SceneSwitcherService>();
-        _coroutinesPerformer = (CoroutinesPerformer)_projectContainer.Resolve<ICoroutinesPerfomer>();
+        _playerDataProvider = _gameplayContainer.Resolve<PlayerDataProvider>();
+        _walletService = _gameplayContainer.Resolve<WalletService>();
+        _generator = _gameplayContainer.Resolve<SymbolsGenerator>();
+        _sceneSwitcher = _gameplayContainer.Resolve<SceneSwitcherService>();
+        _coroutinesPerformer = _gameplayContainer.Resolve<ICoroutinesPerformer>();
+        _configsProviderService = _gameplayContainer.Resolve<ConfigsProviderService>();
+        _statisticsService = _gameplayContainer.Resolve<StatisticsService>();
+
+        _rulesConfig = _configsProviderService.GetConfig<StartGameModeRulesConfig>();
     }
 
     public void Update(float deltaTime)
@@ -88,6 +102,14 @@ public class GameplayCycle
     {
         ProcessEndGame();
         Debug.Log("Неправильно, проиграл");
+
+        _walletService.Waste(CurrencyTypes.Gold, _rulesConfig.CostOfLose);
+        _statisticsService.ProcessDefeat();
+
+        _coroutinesPerformer.StartPerform(_playerDataProvider.Save());
+
+        Debug.Log($"Сейчас у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота");
+
         Debug.Log($"Нажми {RestartCode} чтобы начать заново");
 
         yield return new WaitWhile(() => Input.GetKeyDown(RestartCode) == false);
@@ -101,6 +123,14 @@ public class GameplayCycle
     {
         ProcessEndGame();
         Debug.Log("Отлично, ты выиграл!");
+
+        _walletService.Add(CurrencyTypes.Gold, _rulesConfig.PrizeForWin);
+        _statisticsService.ProcessWin();
+
+        _coroutinesPerformer.StartPerform(_playerDataProvider.Save());
+
+        Debug.Log($"Сейчас у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота");
+
         Debug.Log($"Нажми {GoToMenuCode} чтобы перейти в главное меню");
 
         yield return new WaitWhile(() => Input.GetKeyDown(GoToMenuCode) == false);
@@ -115,4 +145,6 @@ public class GameplayCycle
 
     public bool DefeatConditionsCompleted(int counter)
      => Input.inputString != _correctAnswer[counter].ToString() && Input.inputString != "";
+
+
 }

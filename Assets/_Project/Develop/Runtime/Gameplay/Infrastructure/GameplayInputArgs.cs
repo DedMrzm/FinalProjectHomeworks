@@ -1,4 +1,4 @@
-﻿using Assets._Project.Develop.Runtime.Gameplay.Configs;
+﻿using Assets._Project.Develop.Runtime.Configs.Gameplay;
 using Assets._Project.Develop.Runtime.Utilitis.SceneManagment;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure

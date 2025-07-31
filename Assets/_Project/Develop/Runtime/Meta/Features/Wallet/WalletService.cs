@@ -53,6 +53,17 @@ namespace Assets._Project.Develop.Runtime.Meta.Features.Wallet
             _currencies[type].Value -= amount;
         }
 
+        public void Waste(CurrencyTypes type, int amount)
+        {
+            if (amount < 0)
+                throw new ArgumentOutOfRangeException(nameof(amount));
+
+            _currencies[type].Value -= amount;
+
+            if (amount < 0)
+                amount = 0;
+        }
+
         public void ReadFrom(PlayerData data)
         {
             foreach (KeyValuePair<CurrencyTypes, int> currency in data.WalletData)

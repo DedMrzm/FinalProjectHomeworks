@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using Assets._Project.Develop.Runtime.Utilitis.AssetsManagment;
@@ -38,7 +39,12 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle(CreatePlayerDataProvider);
 
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
+
+            container.RegisterAsSingle(CreateStatisticsService).NonLazy();
         }
+        
+        private static StatisticsService CreateStatisticsService(DIContainer c)
+            => new StatisticsService(c.Resolve<WalletService>(), c.Resolve<PlayerDataProvider>(), c.Resolve<ConfigsProviderService>());
 
         private static PlayerDataProvider CreatePlayerDataProvider(DIContainer c)
             => new PlayerDataProvider(c.Resolve<ISaveLoadService>(), c.Resolve<ConfigsProviderService>());
@@ -85,12 +91,12 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
 
         private static ResourcesAssetsLoader CreateResourcesAssetsLoader(DIContainer c) => new ResourcesAssetsLoader();
 
-        private static CoroutinesPerfomer CreateCoroutinesPerformer(DIContainer c)
+        private static CoroutinesPerformer CreateCoroutinesPerformer(DIContainer c)
         {
             ResourcesAssetsLoader resourcesAssetsLoader = c.Resolve<ResourcesAssetsLoader>();
 
-            CoroutinesPerfomer coroutinesPerfomerPrefab = resourcesAssetsLoader
-                .Load<CoroutinesPerfomer>("Utilities/CoroutinesPerformer");
+            CoroutinesPerformer coroutinesPerfomerPrefab = resourcesAssetsLoader
+                .Load<CoroutinesPerformer>("Utilities/CoroutinesPerformer");
 
             return Object.Instantiate(coroutinesPerfomerPrefab);
         }

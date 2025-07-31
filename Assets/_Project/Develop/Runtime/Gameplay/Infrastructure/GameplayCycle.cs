@@ -1,5 +1,6 @@
 using Assets._Project.Develop.Runtime.Gameplay.Core;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilitis.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilitis.SceneManagment;
 using System.Collections;
@@ -19,6 +20,7 @@ public class GameplayCycle
     private SymbolsGenerator _generator;
     private SceneSwitcherService _sceneSwitcher;
     private CoroutinesPerformer _coroutinesPerformer;
+    private WalletService _walletService;
 
     private string _correctAnswer;
     private int _counter = 0;
@@ -29,6 +31,7 @@ public class GameplayCycle
     {
         _projectContainer = projectContainer;
 
+        _walletService = _projectContainer.Resolve<WalletService>();
         _generator = _projectContainer.Resolve<SymbolsGenerator>();
         _sceneSwitcher = _projectContainer.Resolve<SceneSwitcherService>();
         _coroutinesPerformer = (CoroutinesPerformer)_projectContainer.Resolve<ICoroutinesPerfomer>();

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f055ae416284cb42959e7872ade5c5f, type: 3}
+  m_Script: {fileID: 11500000, guid: cc2e6e3d6bfc11c4297d014366fa91ea, type: 3}
   m_Name: GameModeConfig
   m_EditorClassIdentifier: 
   <GameMode>k__BackingField: 0

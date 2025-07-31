@@ -40,6 +40,8 @@ namespace Assets._Project.Develop.Runtime.Utilitis.SceneManagment
 
             sceneBootstrap.ProcessRegistrations(sceneContainer, sceneArgs);
 
+            sceneContainer.Initilalize();
+
             yield return sceneBootstrap.Initialize();
 
             _loadingScreen.Hide();

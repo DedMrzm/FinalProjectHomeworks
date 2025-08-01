@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58059a92f7da3e346b51bbb9b19e2275, type: 3}
   m_Name: StartGameModeRulesConfig
   m_EditorClassIdentifier: 
-  <CostOfReset>k__BackingField: 0
-  <PrizeForWin>k__BackingField: 0
-  <CostOfLose>k__BackingField: 0
+  <CostOfReset>k__BackingField: 50
+  <PrizeForWin>k__BackingField: 20
+  <CostOfLose>k__BackingField: 5

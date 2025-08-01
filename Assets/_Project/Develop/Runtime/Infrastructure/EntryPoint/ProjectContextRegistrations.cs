@@ -44,7 +44,11 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
         }
         
         private static StatisticsService CreateStatisticsService(DIContainer c)
-            => new StatisticsService(c.Resolve<WalletService>(), c.Resolve<PlayerDataProvider>(), c.Resolve<ConfigsProviderService>());
+            => new StatisticsService(
+                c.Resolve<WalletService>(), 
+                c.Resolve<PlayerDataProvider>(),
+                c.Resolve<ConfigsProviderService>(), 
+                c.Resolve<ICoroutinesPerformer>());
 
         private static PlayerDataProvider CreatePlayerDataProvider(DIContainer c)
             => new PlayerDataProvider(c.Resolve<ISaveLoadService>(), c.Resolve<ConfigsProviderService>());

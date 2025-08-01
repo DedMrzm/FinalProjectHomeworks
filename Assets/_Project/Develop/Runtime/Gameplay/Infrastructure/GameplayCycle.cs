@@ -106,8 +106,6 @@ public class GameplayCycle
         _walletService.Waste(CurrencyTypes.Gold, _rulesConfig.CostOfLose);
         _statisticsService.ProcessDefeat();
 
-        _coroutinesPerformer.StartPerform(_playerDataProvider.Save());
-
         Debug.Log($"Сейчас у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота");
 
         Debug.Log($"Нажми {RestartCode} чтобы начать заново");
@@ -126,8 +124,6 @@ public class GameplayCycle
 
         _walletService.Add(CurrencyTypes.Gold, _rulesConfig.PrizeForWin);
         _statisticsService.ProcessWin();
-
-        _coroutinesPerformer.StartPerform(_playerDataProvider.Save());
 
         Debug.Log($"Сейчас у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота");
 

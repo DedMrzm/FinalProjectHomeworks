@@ -11,6 +11,7 @@ using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using UnityEngine;
 using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
+using Assets._Project.Develop.Runtime.Utilitis.CoroutinesManagment;
 
 namespace Assets._Project.Develop.Runtime.Meta.Features
 {
@@ -22,14 +23,21 @@ namespace Assets._Project.Develop.Runtime.Meta.Features
         private StartGameModeRulesConfig _rulesConfig;
         private ConfigsProviderService _configsProviderService;
 
+        private ICoroutinesPerformer _coroutinesPerformer;
+
         private int _countOfWins;
         private int _countOfDefeats;
 
-        public StatisticsService(WalletService walletService, PlayerDataProvider playerDataProvider, ConfigsProviderService configsProviderService)
+        public StatisticsService(
+            WalletService walletService,
+            PlayerDataProvider playerDataProvider,
+            ConfigsProviderService configsProviderService,
+            ICoroutinesPerformer coroutinesPerformer)
         {
             _playerDataProvder = playerDataProvider;
             _walletService = walletService;
             _configsProviderService = configsProviderService;
+            _coroutinesPerformer = coroutinesPerformer;
 
             playerDataProvider.RegisterWriter(this);
             playerDataProvider.RegisterReader(this);
@@ -44,7 +52,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Features
                 _countOfWins = 0;
                 _countOfDefeats = 0;
 
-                _playerDataProvder.Save();
+                _coroutinesPerformer.StartPerform(_playerDataProvder.Save());
 
                 Debug.Log("Статистика сброшена!");
                 Debug.Log($"Теперь у вас {_walletService.GetCurrency(CurrencyTypes.Gold).Value} монет, и {_countOfDefeats} - проигрышей, {_countOfWins} - побед!");
@@ -63,11 +71,15 @@ namespace Assets._Project.Develop.Runtime.Meta.Features
         public void ProcessWin()
         {
             _countOfWins++;
+
+            _coroutinesPerformer.StartPerform(_playerDataProvder.Save());
         }
 
         public void ProcessDefeat()
         {
             _countOfDefeats++;
+
+            _coroutinesPerformer.StartPerform(_playerDataProvder.Save());
         }
 
         public void ReadFrom(PlayerData data)

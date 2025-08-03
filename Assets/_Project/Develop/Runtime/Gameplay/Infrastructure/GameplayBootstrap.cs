@@ -30,12 +30,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             _coroutinesPerformer = _projectContainer.Resolve<ICoroutinesPerformer>();
             _updateService = FindObjectOfType<UpdateService>();
 
-            if (sceneArgs is not GameplayInputArgs gameplayInputArgs)
-                throw new ArgumentException($"{nameof(sceneArgs)} is not match with {typeof(GameplayInputArgs)} type");
+            //if (sceneArgs is not GameplayInputArgs gameplayInputArgs)
+            //    throw new ArgumentException($"{nameof(sceneArgs)} is not match with {typeof(GameplayInputArgs)} type");
 
-            _inputArgs = gameplayInputArgs;
+            //_inputArgs = gameplayInputArgs;
 
-            GameplayContextRegistrations.Process(_projectContainer, _inputArgs);
+            GameplayContextRegistrations.Process(_projectContainer);
         }
 
         public override IEnumerator Initialize()
@@ -45,8 +45,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             yield return _configsProviderService.LoadAsync();
 
             GameModeConfig config = _configsProviderService.GetConfig<GameModeConfig>();
-
-            config.SetGameMode(_inputArgs.PickedGameMode);
 
             Debug.Log($"Уровень: {config.GameMode}");
 

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.UI.Gameplay.CymbolGenerator
 {
-    public class CorrectAnswerView
+    public class CorrectAnswerView : MonoBehaviour
     {
 
     }

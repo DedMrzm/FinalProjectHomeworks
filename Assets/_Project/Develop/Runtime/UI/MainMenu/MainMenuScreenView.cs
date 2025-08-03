@@ -14,26 +14,37 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
     public class MainMenuScreenView : MonoBehaviour, IView
     {
         public event Action ResetStatisticsButtonClicked;
+        public event Action GoToGameplayButtonClicked;
 
         [field: SerializeField] public IconTextListView WalletView { get; private set; }
         [field: SerializeField] public IconTextListView StatisticsView { get; private set; }
 
         [SerializeField] private Button _resetStatisticsButton;
+        [SerializeField] private Button _goToGameplayButton;
+
         [SerializeField] private TMP_Text _resetStatisticsCostText;
 
         private void OnEnable()
         {
-            _resetStatisticsButton.onClick.AddListener(OnResetStatisticsButtonClicked);
+            _resetStatisticsButton.onClick.AddListener(OnResetStatisticsButtonClick);
+            _goToGameplayButton.onClick.AddListener(OnGoToGameplayButtonClicked);
         }
 
         private void OnDisable()
         {
-            _resetStatisticsButton.onClick.RemoveListener(OnResetStatisticsButtonClicked);
+            _resetStatisticsButton.onClick.RemoveListener(OnResetStatisticsButtonClick);
+            _goToGameplayButton.onClick.RemoveListener(OnGoToGameplayButtonClicked);
+
         }
 
-        private void OnResetStatisticsButtonClicked()
+        private void OnResetStatisticsButtonClick()
         {
             ResetStatisticsButtonClicked?.Invoke();
+        }
+        
+        private void OnGoToGameplayButtonClicked()
+        {
+            GoToGameplayButtonClicked?.Invoke();
         }
     }
 }

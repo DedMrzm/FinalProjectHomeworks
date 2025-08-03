@@ -6,10 +6,12 @@ namespace Assets._Project.Develop.Runtime.Configs.Gameplay
     public class GameModeConfig : ScriptableObject
     {
         [field: SerializeField] public GameModes GameMode { get; private set; }
+        [field: SerializeField] public int CountOfGeneratedSymbols { get; private set; }
 
-        public void SetGameMode(GameModes gameMode)
+        public void SetGameMode(GameModes gameMode, int countOfGeneratedSymbols)
         {
             GameMode = gameMode;
+            CountOfGeneratedSymbols = countOfGeneratedSymbols;
         }
     }
 }

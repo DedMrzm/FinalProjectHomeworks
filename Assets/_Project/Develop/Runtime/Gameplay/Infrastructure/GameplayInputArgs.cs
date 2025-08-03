@@ -5,11 +5,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 {
     public class GameplayInputArgs : IInputSceneArgs
     {
-        public GameplayInputArgs(GameModes pickedGameMode)
+        public GameplayInputArgs(GameModes pickedGameMode, int countOfGeneratedSymbols)
         {
-           PickedGameMode = pickedGameMode;
+            PickedGameMode = pickedGameMode;
+            CountOfGeneratedSymbols = countOfGeneratedSymbols;
         }
 
         public GameModes PickedGameMode { get; }
+        public int CountOfGeneratedSymbols { get; }
     }
 }

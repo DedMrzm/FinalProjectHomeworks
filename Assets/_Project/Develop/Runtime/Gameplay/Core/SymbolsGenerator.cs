@@ -36,8 +36,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
                 _correctAnswer += string.Concat(_generatorSettings[_pickedGameMode][Random.Range(0, _generatorSettings[_pickedGameMode].Length-1)]);
             }
 
-            Debug.Log("Правильный ответ: " + _correctAnswer);
-
             return _correctAnswer;
         }
     }

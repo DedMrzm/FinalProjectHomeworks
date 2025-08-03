@@ -6,7 +6,7 @@
         public const string MainMenuScreen = nameof(MainMenuScreen);
         public const string ResetPopup = nameof(ResetPopup);
         public const string OneStatisticView = nameof(OneStatisticView);
-        public const string LevelTile = nameof(LevelTile);
-        public const string LevelsMenuPopup = nameof(LevelsMenuPopup);
+        public const string GameplayScreenView = nameof(GameplayScreenView);
+        public const string GameplayUIRoot = nameof(GameplayUIRoot);
     }
 }

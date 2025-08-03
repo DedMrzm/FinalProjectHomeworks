@@ -23,7 +23,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
 
         protected abstract Transform PopupLayer { get; }
 
-        public ResetPopupPresenter OpenLevelsMenuPopup(Action closedCallback = null)
+        public ResetPopupPresenter OpenResetStatisticsPopup(Action closedCallback = null)
         {
             ResetPopupView view = ViewsFactory.Create<ResetPopupView>(ViewIDs.ResetPopup, PopupLayer);
 

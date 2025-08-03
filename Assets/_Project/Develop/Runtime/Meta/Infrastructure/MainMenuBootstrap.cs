@@ -4,6 +4,7 @@ using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilitis.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilitis.DataManagment;
 using Assets._Project.Develop.Runtime.Utilitis.DataManagment.DataProviders;
@@ -50,13 +51,13 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             {
                 SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
                 ICoroutinesPerformer coroutinesPerfomer = _container.Resolve<ICoroutinesPerformer>();
-                coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(GameModes.Chars)));
+                coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(GameModes.Chars, _container.Resolve<ConfigsProviderService>().GetConfig<GameModeConfig>().CountOfGeneratedSymbols)));
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
                 ICoroutinesPerformer coroutinesPerfomer = _container.Resolve<ICoroutinesPerformer>();
-                coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(GameModes.Digits)));
+                coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(GameModes.Digits, _container.Resolve<ConfigsProviderService>().GetConfig<GameModeConfig>().CountOfGeneratedSymbols)));
             }
 
             if (Input.GetKeyDown(KeyCode.S))

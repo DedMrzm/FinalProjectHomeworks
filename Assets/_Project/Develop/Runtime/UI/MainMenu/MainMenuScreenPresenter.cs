@@ -29,7 +29,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
         }
         public void Initialize()
         {
-            _screen.OpenLevelsMenuButtonClick += OnOpenLevelsMenuButtonClick;
+            _screen.ResetStatisticsButtonClicked += OnOpenLevelsMenuButtonClick;
 
             CreateWallet();
 
@@ -39,7 +39,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 
         public void Dispose()
         {
-            _screen.OpenLevelsMenuButtonClick -= OnOpenLevelsMenuButtonClick;
+            _screen.ResetStatisticsButtonClicked -= OnOpenLevelsMenuButtonClick;
 
             foreach (IPresenter presenter in _childPresenters)
                 presenter.Dispose();

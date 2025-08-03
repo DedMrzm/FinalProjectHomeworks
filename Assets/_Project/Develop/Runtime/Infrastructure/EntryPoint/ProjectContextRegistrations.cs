@@ -1,6 +1,8 @@
 ﻿using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI;
 using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using Assets._Project.Develop.Runtime.Utilitis.AssetsManagment;
 using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
@@ -41,8 +43,18 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
 
             container.RegisterAsSingle(CreateStatisticsService).NonLazy();
+
+            container.RegisterAsSingle(CreateProjectPresentersFactory);
+
+            container.RegisterAsSingle(CreateViewsFactory);
         }
-        
+
+        private static ViewsFactory CreateViewsFactory(DIContainer c)
+        => new ViewsFactory(c.Resolve<ResourcesAssetsLoader>());
+
+        private static ProjectPresentersFactory CreateProjectPresentersFactory(DIContainer c)
+            => new ProjectPresentersFactory(c);
+
         private static StatisticsService CreateStatisticsService(DIContainer c)
             => new StatisticsService(
                 c.Resolve<WalletService>(), 

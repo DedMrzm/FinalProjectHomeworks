@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,25 +13,26 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
 {
     public class MainMenuScreenView : MonoBehaviour, IView
     {
-        public event Action OpenLevelsMenuButtonClick;
+        public event Action ResetStatisticsButtonClicked;
 
         [field: SerializeField] public IconTextListView WalletView { get; private set; }
 
-        [SerializeField] private Button _openLevelsMenuButton;
+        [SerializeField] private Button _resetStatisticsButton;
+        [SerializeField] private TMP_Text _resetStatisticsCostText;
 
         private void OnEnable()
         {
-            _openLevelsMenuButton.onClick.AddListener(OnOpenLevelsMenuButtonClick);
+            _resetStatisticsButton.onClick.AddListener(OnResetStatisticsButtonClicked);
         }
 
         private void OnDisable()
         {
-            _openLevelsMenuButton.onClick.RemoveListener(OnOpenLevelsMenuButtonClick);
+            _resetStatisticsButton.onClick.RemoveListener(OnResetStatisticsButtonClicked);
         }
 
-        private void OnOpenLevelsMenuButtonClick()
+        private void OnResetStatisticsButtonClicked()
         {
-            OpenLevelsMenuButtonClick?.Invoke();
+            ResetStatisticsButtonClicked?.Invoke();
         }
     }
 }

@@ -69,7 +69,6 @@ namespace Assets._Project.Develop.Runtime.UI.Core
             yield return PopupView.Show().WaitForCompletion();
 
             OnPostShow();
-
         }
 
         private IEnumerator ProcessHide(Action callback)

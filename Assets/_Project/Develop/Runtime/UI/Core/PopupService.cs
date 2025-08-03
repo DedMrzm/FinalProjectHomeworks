@@ -23,11 +23,11 @@ namespace Assets._Project.Develop.Runtime.UI.Core
 
         protected abstract Transform PopupLayer { get; }
 
-        public TestPopupPresenter OpenLevelsMenuPopup(Action closedCallback = null)
+        public ResetPopupPresenter OpenLevelsMenuPopup(Action closedCallback = null)
         {
-            TestPopupView view = ViewsFactory.Create<TestPopupView>(ViewIDs.TestPopup, PopupLayer);
+            ResetPopupView view = ViewsFactory.Create<ResetPopupView>(ViewIDs.TestPopup, PopupLayer);
 
-            TestPopupPresenter popup = _presentersFactory.CreateTestPopupPresenter(view);
+            ResetPopupPresenter popup = _presentersFactory.CreateResetPopupPresenter(view);
 
             OnPopupCreated(popup, view, closedCallback);
 

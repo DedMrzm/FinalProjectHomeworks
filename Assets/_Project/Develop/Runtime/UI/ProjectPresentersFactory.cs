@@ -1,5 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.UI.CommonView;
 using Assets._Project.Develop.Runtime.UI.Core;
@@ -41,11 +42,12 @@ namespace Assets._Project.Develop.Runtime.UI
                 view);
         }
 
-        public TestPopupPresenter CreateTestPopupPresenter(TestPopupView view)
+        public ResetPopupPresenter CreateResetPopupPresenter(ResetPopupView view)
         {
-            return new TestPopupPresenter(
+            return new ResetPopupPresenter(
                 view,
-                _container.Resolve<ICoroutinesPerformer>());
+                _container.Resolve<ICoroutinesPerformer>(),
+                _container.Resolve<StatisticsService>());
         }
     }
 }

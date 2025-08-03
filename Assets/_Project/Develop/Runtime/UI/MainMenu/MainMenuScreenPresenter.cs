@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.MainMenu.Statistics;
 using Assets._Project.Develop.Runtime.UI.Wallet;
 using System;
 using System.Collections.Generic;
@@ -29,17 +30,18 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
         }
         public void Initialize()
         {
-            _screen.ResetStatisticsButtonClicked += OnOpenLevelsMenuButtonClick;
+            _screen.ResetStatisticsButtonClicked += OnResetStatisticsButtonClick;
 
             CreateWallet();
+            CreateStatisticsPanel();
 
-            foreach(IPresenter presenter in _childPresenters)
+            foreach (IPresenter presenter in _childPresenters)
                 presenter.Initialize();
         }
 
         public void Dispose()
         {
-            _screen.ResetStatisticsButtonClicked -= OnOpenLevelsMenuButtonClick;
+            _screen.ResetStatisticsButtonClicked -= OnResetStatisticsButtonClick;
 
             foreach (IPresenter presenter in _childPresenters)
                 presenter.Dispose();
@@ -54,7 +56,14 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
             _childPresenters.Add(walletPresenter);
         }
 
-        private void OnOpenLevelsMenuButtonClick()
+        private void CreateStatisticsPanel()
+        {
+            StatisticsPresenter statisticsPresenter = _projectPresentersFactory.CreateStatisticsPresenter(_screen.StatisticsView);
+
+            _childPresenters.Add(statisticsPresenter);
+        }
+
+        private void OnResetStatisticsButtonClick()
         {
             _popupService.OpenLevelsMenuPopup();
         }

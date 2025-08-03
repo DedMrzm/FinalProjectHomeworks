@@ -16,6 +16,7 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
         public event Action ResetStatisticsButtonClicked;
 
         [field: SerializeField] public IconTextListView WalletView { get; private set; }
+        [field: SerializeField] public IconTextListView StatisticsView { get; private set; }
 
         [SerializeField] private Button _resetStatisticsButton;
         [SerializeField] private TMP_Text _resetStatisticsCostText;

@@ -1,22 +1,22 @@
 ﻿using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.Utilitis.DataManagment.DataProviders;
 using Assets._Project.Develop.Runtime.Utilitis.DataManagment;
-using Assets._Project.Develop.Runtime.Utilitis.Reactive;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using UnityEngine;
 using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilitis.CoroutinesManagment;
+using System.Collections.Generic;
+using Assets._Project.Develop.Runtime.Meta.Features.Statistics;
+using Assets._Project.Develop.Runtime.Utilitis.Reactive;
 
 namespace Assets._Project.Develop.Runtime.Meta.Features
 {
     public class StatisticsService : IDataReader<PlayerData>, IDataWriter<PlayerData>
     {
+        public event Action StatisticsChanged;
+        public event Action ResetedStatistics;
+
         private WalletService _walletService;
         private PlayerDataProvider _playerDataProvder;
 
@@ -25,8 +25,11 @@ namespace Assets._Project.Develop.Runtime.Meta.Features
 
         private ICoroutinesPerformer _coroutinesPerformer;
 
-        private int _countOfWins;
-        private int _countOfDefeats;
+        private int _countOfWins = 0;
+        private int _countOfDefeats = 0;
+
+        private Dictionary<StatisticsTypes, object> _statistics = new();
+
 
         public StatisticsService(
             WalletService walletService,
@@ -41,6 +44,16 @@ namespace Assets._Project.Develop.Runtime.Meta.Features
 
             playerDataProvider.RegisterWriter(this);
             playerDataProvider.RegisterReader(this);
+
+            Initialize();
+        }
+
+        public IReadOnlyDictionary<StatisticsTypes, object> Statistics => _statistics;
+
+        private void Initialize()
+        {
+            foreach (StatisticsTypes statisticsType in Enum.GetValues(typeof(CurrencyTypes)))
+                _statistics[statisticsType] = 0;
         }
 
         public void ResetStatistics()
@@ -52,7 +65,11 @@ namespace Assets._Project.Develop.Runtime.Meta.Features
                 _countOfWins = 0;
                 _countOfDefeats = 0;
 
+                UpdateStatistics();
+
                 _coroutinesPerformer.StartPerform(_playerDataProvder.Save());
+
+                ResetedStatistics?.Invoke();
 
                 Debug.Log("Статистика сброшена!");
                 Debug.Log($"Теперь у вас {_walletService.GetCurrency(CurrencyTypes.Gold).Value} монет, и {_countOfDefeats} - проигрышей, {_countOfWins} - побед!");
@@ -72,12 +89,16 @@ namespace Assets._Project.Develop.Runtime.Meta.Features
         {
             _countOfWins++;
 
+            UpdateStatistics();
+
             _coroutinesPerformer.StartPerform(_playerDataProvder.Save());
         }
 
         public void ProcessDefeat()
         {
             _countOfDefeats++;
+
+            UpdateStatistics();
 
             _coroutinesPerformer.StartPerform(_playerDataProvder.Save());
         }
@@ -86,12 +107,22 @@ namespace Assets._Project.Develop.Runtime.Meta.Features
         {
             _countOfWins = data.CountOfWins;
             _countOfDefeats = data.CountOfDefeats;
+            UpdateStatistics();
         }
 
         public void WriteTo(PlayerData data)
         {
             data.CountOfWins = _countOfWins;
             data.CountOfDefeats = _countOfDefeats;
+            UpdateStatistics();
+        }
+
+        private void UpdateStatistics()
+        {
+            _statistics[StatisticsTypes.Wins] = _countOfWins;
+            _statistics[StatisticsTypes.Defeats] = _countOfDefeats;
+
+            StatisticsChanged?.Invoke();
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features;
+using Assets._Project.Develop.Runtime.Meta.Features.Statistics;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.UI.CommonView;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Core.TestPopup;
+using Assets._Project.Develop.Runtime.UI.MainMenu.Statistics;
 using Assets._Project.Develop.Runtime.UI.Wallet;
 using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilitis.CoroutinesManagment;
@@ -34,6 +36,27 @@ namespace Assets._Project.Develop.Runtime.UI
                 view);
         }
 
+        public StatisticsPresenter CreateStatisticsPresenter(
+            IconTextListView view)
+        {
+            return new StatisticsPresenter(
+                this,
+                _container.Resolve<ViewsFactory>(),
+                view,
+                _container.Resolve<StatisticsService>());
+        }
+
+        public OneStatisticPresenter CreateOneStatisticPresenter(
+            IconTextView view,
+            StatisticsTypes statisticsType,
+            StatisticsService statisticsService)
+        {
+            return new OneStatisticPresenter(
+                statisticsType,
+                view,
+                statisticsService);
+        }
+
         public WalletPresenter CreateWalletPresenter(IconTextListView view)
         {
             return new WalletPresenter(_container.Resolve<WalletService>(),
@@ -47,7 +70,8 @@ namespace Assets._Project.Develop.Runtime.UI
             return new ResetPopupPresenter(
                 view,
                 _container.Resolve<ICoroutinesPerformer>(),
-                _container.Resolve<StatisticsService>());
+                _container.Resolve<StatisticsService>(),
+                _container.Resolve<ConfigsProviderService>().GetConfig<StartGameModeRulesConfig>());
         }
     }
 }

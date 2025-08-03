@@ -9,7 +9,7 @@ namespace Assets._Project.Develop.Runtime.UI.Wallet
     {
         private readonly WalletService _walletService;
         private readonly ProjectPresentersFactory _presentersFactory;
-        private readonly ViewsFactory _viewFactory;
+        private readonly ViewsFactory _viewsFactory;
 
         private readonly IconTextListView _view;
 
@@ -23,7 +23,7 @@ namespace Assets._Project.Develop.Runtime.UI.Wallet
         {
             _walletService = walletService;
             _presentersFactory = presentersFactory;
-            _viewFactory = viewFactory;
+            _viewsFactory = viewFactory;
             _view = view;
         }
 
@@ -31,7 +31,7 @@ namespace Assets._Project.Develop.Runtime.UI.Wallet
         {
             foreach(CurrencyTypes currencyType in _walletService.AvailableCurrencies)
             {
-                IconTextView currencyView = _viewFactory.Create<IconTextView>(ViewIDs.CurrencyView);
+                IconTextView currencyView = _viewsFactory.Create<IconTextView>(ViewIDs.CurrencyView);
 
                 _view.Add(currencyView);
 
@@ -50,7 +50,7 @@ namespace Assets._Project.Develop.Runtime.UI.Wallet
             foreach(CurrencyPresenter currencyPresenter in _currencyPresenters)
             {
                 _view.Remove(currencyPresenter.View);
-                _viewFactory.Release(currencyPresenter.View);
+                _viewsFactory.Release(currencyPresenter.View);
                 currencyPresenter.Dispose();
             }
 

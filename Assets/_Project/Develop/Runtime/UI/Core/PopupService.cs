@@ -25,7 +25,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core
 
         public ResetPopupPresenter OpenLevelsMenuPopup(Action closedCallback = null)
         {
-            ResetPopupView view = ViewsFactory.Create<ResetPopupView>(ViewIDs.TestPopup, PopupLayer);
+            ResetPopupView view = ViewsFactory.Create<ResetPopupView>(ViewIDs.ResetPopup, PopupLayer);
 
             ResetPopupPresenter popup = _presentersFactory.CreateResetPopupPresenter(view);
 

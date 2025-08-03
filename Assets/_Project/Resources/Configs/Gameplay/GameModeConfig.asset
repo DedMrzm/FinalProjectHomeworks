@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GameModeConfig
   m_EditorClassIdentifier: 
   <GameMode>k__BackingField: 0
+  <CountOfGeneratedSymbols>k__BackingField: 5

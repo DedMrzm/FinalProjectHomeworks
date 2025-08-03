@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
+using Assets._Project.Develop.Runtime.Gameplay.Core;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.Statistics;
@@ -6,6 +7,7 @@ using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using Assets._Project.Develop.Runtime.UI.CommonView;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Core.TestPopup;
+using Assets._Project.Develop.Runtime.UI.Gameplay.CymbolGenerator;
 using Assets._Project.Develop.Runtime.UI.MainMenu.Statistics;
 using Assets._Project.Develop.Runtime.UI.Wallet;
 using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
@@ -55,6 +57,12 @@ namespace Assets._Project.Develop.Runtime.UI
                 statisticsType,
                 view,
                 statisticsService);
+        }
+        public CorrectAnswerPresenter CreateCorrectAnswerPresenter(
+            SymbolsGenerator symbolsGenerator,
+            CorrectAnswerView view)
+        {
+            return new CorrectAnswerPresenter(symbolsGenerator, view);
         }
 
         public WalletPresenter CreateWalletPresenter(IconTextListView view)

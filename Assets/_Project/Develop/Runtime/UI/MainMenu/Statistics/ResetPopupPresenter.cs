@@ -32,7 +32,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core.TestPopup
         {
             base.Initialize();
 
-            _view.ResetedStatistics += _statisticsService.ResetStatistics;
+            _view.ResetedStatistics += _statisticsService.OnResetStatistics;
 
             if(_rulesConfig.CostOfReset >= _walletService.GetCurrency(CurrencyTypes.Gold).Value)
             {
@@ -52,7 +52,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core.TestPopup
         {
             base.Dispose();
 
-            _view.ResetedStatistics -= _statisticsService.ResetStatistics;
+            _view.ResetedStatistics -= _statisticsService.OnResetStatistics;
 
             _statisticsService.ResetedStatistics -= _view.OnCloseButtonClick;
         }

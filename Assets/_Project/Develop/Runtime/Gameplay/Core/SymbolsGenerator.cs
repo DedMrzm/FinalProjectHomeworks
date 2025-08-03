@@ -5,11 +5,14 @@ using UnityEngine;
 using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
 using System.Linq;
 using Assets._Project.Develop.Runtime.Configs.Gameplay;
+using System;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Core
 {
     public class SymbolsGenerator
     {
+        public event Action<string> CorrectAnswerChanged;
+
         private ConfigsProviderService _configsProviderService;
 
         private Dictionary<GameModes, string> _generatorSettings = new Dictionary<GameModes, string>()
@@ -31,11 +34,12 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
         public string Generate()
         {
             _correctAnswer = "";
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < _configsProviderService.GetConfig<GameModeConfig>().CountOfGeneratedSymbols; i++)
             {
                 _correctAnswer += string.Concat(_generatorSettings[_pickedGameMode][Random.Range(0, _generatorSettings[_pickedGameMode].Length-1)]);
             }
 
+            CorrectAnswerChanged?.Invoke(_correctAnswer);
             return _correctAnswer;
         }
     }

@@ -10,30 +10,43 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
     {
         private readonly GameplayScreenView _screen;
 
-        private readonly ProjectPresentersFactory _projectPresentersFactory;
         private readonly SceneSwitcherService _sceneSwitcherService;
         private readonly ICoroutinesPerformer _coroutinesPerformer;
-
-        private readonly PopupService _popupService;
 
         private readonly List<IPresenter> _childPresenters = new();
 
         public GameplayScreenPresenter(
             GameplayScreenView screen,
-            ICoroutinesPerformer coroutinesPerformer)
+            ICoroutinesPerformer coroutinesPerformer,
+            SceneSwitcherService sceneSwitcherService)
         {
             _screen = screen;
             _coroutinesPerformer = coroutinesPerformer;
+            _sceneSwitcherService = sceneSwitcherService;
         }
         public void Initialize()
         {
             _screen.GoToMenuButtonClicked += OnGoToMenuButtonClicked;
-        }
 
+
+
+            foreach (IPresenter presenter in _childPresenters)
+                presenter.Initialize();
+        }
 
         public void Dispose()
         {
             _screen.GoToMenuButtonClicked -= OnGoToMenuButtonClicked;
+
+            foreach (IPresenter presenter in _childPresenters)
+                presenter.Dispose();
+
+            _childPresenters.Clear();
+        }
+
+        private void CreateCorrectAnswerPresenter()
+        {
+
         }
 
         private void OnGoToMenuButtonClicked()

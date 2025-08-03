@@ -2,10 +2,12 @@
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.UI.Core;
 using Assets._Project.Develop.Runtime.UI.Gameplay;
+using Assets._Project.Develop.Runtime.UI.Gameplay.CymbolGenerator;
 using Assets._Project.Develop.Runtime.UI.MainMenu;
 using Assets._Project.Develop.Runtime.Utilitis.AssetsManagment;
 using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilitis.CoroutinesManagment;
+using Assets._Project.Develop.Runtime.Utilitis.SceneManagment;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
@@ -22,6 +24,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         public static SymbolsGenerator CreateSymbolsGenerator(DIContainer c)
             => new SymbolsGenerator(c.Resolve<ConfigsProviderService>());
+
 
         public static GameplayUIRoot CreateGameplayUIRoot(DIContainer c)
         {
@@ -43,7 +46,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
                 .Resolve<ViewsFactory>()
                 .Create<GameplayScreenView>(ViewIDs.GameplayScreenView, uiRoot.HUDLayer);
 
-            GameplayScreenPresenter presenter = new GameplayScreenPresenter(view, c.Resolve<ICoroutinesPerformer>());
+            GameplayScreenPresenter presenter = new GameplayScreenPresenter(
+                view,
+                c.Resolve<ICoroutinesPerformer>(), 
+                c.Resolve<SceneSwitcherService>());
 
             return presenter;
         }

@@ -1,7 +1,7 @@
 {
-  "CountOfWins": 1,
-  "CountOfDefeats": 5,
+  "CountOfWins": 2,
+  "CountOfDefeats": 12,
   "WalletData": {
-    "Gold": 35
+    "Gold": 20
   }
 }

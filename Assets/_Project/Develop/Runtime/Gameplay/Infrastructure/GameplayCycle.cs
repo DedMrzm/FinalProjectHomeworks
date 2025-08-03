@@ -81,11 +81,6 @@ public class GameplayCycle : IUpdatable
     public IEnumerator Launch()
     {
         _counter = 0;
-        Debug.Log($"Чтобы начать, введите {NextCode}");
-
-        yield return new WaitWhile(() => Input.GetKeyDown(NextCode) == false);
-
-        Debug.Log("Введите набор символов, как в дебаг логе");
 
         _correctAnswer = _generator.Generate();
 

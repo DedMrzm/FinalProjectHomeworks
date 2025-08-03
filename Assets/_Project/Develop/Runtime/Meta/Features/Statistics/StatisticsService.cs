@@ -56,7 +56,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Features
                 _statistics[statisticsType] = 0;
         }
 
-        public void ResetStatistics()
+        public void OnResetStatistics()
         {
             _rulesConfig = _configsProviderService.GetConfig<StartGameModeRulesConfig>();
             if (_walletService.Enough(CurrencyTypes.Gold, _rulesConfig.CostOfReset))

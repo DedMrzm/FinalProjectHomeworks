@@ -1,4 +1,5 @@
 using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
+using Assets._Project.Develop.Runtime.Gameplay;
 using Assets._Project.Develop.Runtime.Gameplay.Core;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features;
@@ -13,7 +14,7 @@ using System.Linq;
 using UnityEngine;
 using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
-public class GameplayCycle
+public class GameplayCycle : IUpdatable
 {
     private const KeyCode NextCode = KeyCode.Space;
     private const KeyCode RestartCode = KeyCode.Space;

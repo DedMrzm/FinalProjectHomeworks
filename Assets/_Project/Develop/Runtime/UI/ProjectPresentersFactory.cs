@@ -71,7 +71,8 @@ namespace Assets._Project.Develop.Runtime.UI
                 view,
                 _container.Resolve<ICoroutinesPerformer>(),
                 _container.Resolve<StatisticsService>(),
-                _container.Resolve<ConfigsProviderService>().GetConfig<StartGameModeRulesConfig>());
+                _container.Resolve<ConfigsProviderService>().GetConfig<StartGameModeRulesConfig>(),
+                _container.Resolve<WalletService>());
         }
     }
 }

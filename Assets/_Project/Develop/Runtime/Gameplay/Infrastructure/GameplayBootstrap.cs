@@ -20,6 +20,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         private ICoroutinesPerformer _coroutinesPerformer;
 
         private GameplayCycle _gameplayCycle;
+        private UpdateService _updateService;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
@@ -27,8 +28,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
             _configsProviderService = _projectContainer.Resolve<ConfigsProviderService>();
             _coroutinesPerformer = _projectContainer.Resolve<ICoroutinesPerformer>();
-
-            Debug.Log(sceneArgs);
+            _updateService = FindObjectOfType<UpdateService>();
 
             if (sceneArgs is not GameplayInputArgs gameplayInputArgs)
                 throw new ArgumentException($"{nameof(sceneArgs)} is not match with {typeof(GameplayInputArgs)} type");
@@ -60,19 +60,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
             _coroutinesPerformer.StartPerform(_gameplayCycle.Launch());
 
+            _updateService.Initialize(_gameplayCycle);
+
             Debug.Log("Старт геймплейной сцены");
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                SceneSwitcherService sceneSwitcherService = _projectContainer.Resolve<SceneSwitcherService>();
-                ICoroutinesPerformer coroutinesPerfomer = _projectContainer.Resolve<ICoroutinesPerformer>();
-                coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.MainMenu));
-            }
-
-            _gameplayCycle?.Update(Time.deltaTime);
         }
     }
 }

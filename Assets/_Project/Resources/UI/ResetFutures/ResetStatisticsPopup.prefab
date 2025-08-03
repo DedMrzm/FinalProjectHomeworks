@@ -544,6 +544,9 @@ MonoBehaviour:
   _body: {fileID: 6136923036987082449}
   _animationType: 1
   _costOfResetText: {fileID: 1662953120526421730}
+  _acceptToResetButton: {fileID: 7780721722667960931}
+  _blockColor: {r: 0.16981131, g: 0.16901031, b: 0.16901031, a: 1}
+  _unBlockColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &6191141534093925503
 GameObject:
   m_ObjectHideFlags: 0

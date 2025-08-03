@@ -1,5 +1,8 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.Core;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
+using Assets._Project.Develop.Runtime.UI.Gameplay;
+using Assets._Project.Develop.Runtime.UI.MainMenu;
+using Assets._Project.Develop.Runtime.Utilitis.AssetsManagment;
 using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
 using UnityEngine;
 

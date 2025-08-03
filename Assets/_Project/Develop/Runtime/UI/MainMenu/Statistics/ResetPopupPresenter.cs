@@ -9,6 +9,7 @@ namespace Assets._Project.Develop.Runtime.UI.Core.TestPopup
     {
         private readonly ResetPopupView _view;
         private readonly StatisticsService _statisticsService;
+        private readonly WalletService _walletService;
 
         private readonly StartGameModeRulesConfig _rulesConfig;
 
@@ -16,11 +17,13 @@ namespace Assets._Project.Develop.Runtime.UI.Core.TestPopup
             ResetPopupView view,
             ICoroutinesPerformer coroutinesPerformer,
             StatisticsService statisticsService,
-            StartGameModeRulesConfig rulesConfig) : base(coroutinesPerformer)
+            StartGameModeRulesConfig rulesConfig,
+            WalletService walletService) : base(coroutinesPerformer)
         {
             _view = view;
             _statisticsService = statisticsService;
             _rulesConfig = rulesConfig;
+            _walletService = walletService;
         }
 
         protected override PopupViewBase PopupView => _view;
@@ -30,6 +33,15 @@ namespace Assets._Project.Develop.Runtime.UI.Core.TestPopup
             base.Initialize();
 
             _view.ResetedStatistics += _statisticsService.ResetStatistics;
+
+            if(_rulesConfig.CostOfReset >= _walletService.GetCurrency(CurrencyTypes.Gold).Value)
+            {
+                _view.SetButtonBlock();
+            }
+            else
+            {
+                _view.SetButtonUnBlock();
+            }
 
             _view.SetTextOfCost(_rulesConfig.CostOfReset.ToString(), CurrencyTypes.Gold);
 

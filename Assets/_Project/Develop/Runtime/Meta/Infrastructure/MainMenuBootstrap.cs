@@ -18,9 +18,6 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
     {
         private DIContainer _container;
 
-        private WalletService _walletService;
-        private StatisticsService _statisticsService;
-
         private PlayerDataProvider _playerDataProvider;
         private ICoroutinesPerformer _coroutinesPerformer;
 
@@ -34,9 +31,6 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
         public override IEnumerator Initialize()
         {
             Debug.Log("Инициализация сцены меню");
-
-            _walletService = _container.Resolve<WalletService>();
-            _statisticsService = _container.Resolve<StatisticsService>();
 
             _playerDataProvider = _container.Resolve<PlayerDataProvider>();
             _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
@@ -69,16 +63,6 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             {
                 _coroutinesPerformer.StartPerform(_playerDataProvider.Save());
                 Debug.Log("Сохранение было вызвано");
-            }
-
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                _statisticsService.ShowStatistics();
-            }
-
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                _statisticsService.ResetStatistics();
             }
         }
     }

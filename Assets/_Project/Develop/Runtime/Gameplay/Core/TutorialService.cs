@@ -27,9 +27,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
 
         private float _delay = 0.02f;
 
-        private readonly string DefeatTutorial;
-        private readonly string BeginnerTutorial = "Введи такие же символы, что и внизу";
-        private readonly string WinTutorial;
+        private string _defeatTutorial;
+        private string _beginnerTutorial = "Введи такие же символы, что и внизу";
+        private string _winTutorial;
 
         private bool _beginnerTutorialPassed = false;
 
@@ -40,13 +40,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
             _walletService = walletService;
             _coroutinesPerformer = coroutinesPerformer;
 
-            WinTutorial = $"Поздравляю, ты выиграл!" +
-                $"\nТеперь у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота" +
-                $"\nНажми на {KeyCode.Space}, чтобы сыграть снова!";
-            DefeatTutorial = $"" +
-                $"Ты проиграл :(" +
-                $"\n Теперь у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота" +
-                $"\nНажми на {KeyCode.Space}, чтобы попробовать снова!";
+           SetCurrentTutorialsTexts();
         }
 
         public IEnumerator InputTextWithDelay(float delay, string text, bool isInstantly = false)
@@ -64,14 +58,15 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
         public void StartBeginnerTutorial()
         {
             ClearProcessFlow();
-            _currentProcess = _coroutinesPerformer.StartPerform(InputTextWithDelay(_delay, BeginnerTutorial, _beginnerTutorialPassed));
+            _currentProcess = _coroutinesPerformer.StartPerform(InputTextWithDelay(_delay, _beginnerTutorial, _beginnerTutorialPassed));
             _beginnerTutorialPassed = true;
         }
 
         public IEnumerator StartDefeatTutorial()
         {
             ClearProcessFlow();
-            _currentProcess = _coroutinesPerformer.StartPerform(InputTextWithDelay(_delay, DefeatTutorial));
+            SetCurrentTutorialsTexts();
+            _currentProcess = _coroutinesPerformer.StartPerform(InputTextWithDelay(_delay, _defeatTutorial));
 
             yield return new WaitWhile(() => Input.GetKeyDown(RestartCode) == false);
         }
@@ -79,7 +74,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
         public IEnumerator StartWinTutorial()
         {
             ClearProcessFlow();
-             _currentProcess = _coroutinesPerformer.StartPerform(InputTextWithDelay(_delay, WinTutorial));
+            SetCurrentTutorialsTexts();
+             _currentProcess = _coroutinesPerformer.StartPerform(InputTextWithDelay(_delay, _winTutorial));
 
             yield return new WaitWhile(() => Input.GetKeyDown(RestartCode) == false);
         }
@@ -90,6 +86,17 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
                 _coroutinesPerformer.StopPerform(_currentProcess);
 
             TextCleared?.Invoke();
+        }
+
+        private void SetCurrentTutorialsTexts()
+        {
+            _winTutorial = $"Поздравляю, ты выиграл!" +
+               $"\nТеперь у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота" +
+               $"\nНажми на {KeyCode.Space}, чтобы сыграть снова!";
+            _defeatTutorial = $"" +
+                $"Ты проиграл :(" +
+                $"\n Теперь у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота" +
+                $"\nНажми на {KeyCode.Space}, чтобы попробовать снова!";
         }
     }
 }

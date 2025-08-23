@@ -35,8 +35,8 @@ namespace Assets._Project.Develop.Runtime.UI.MainMenu
             _popupService = popupService;
             _sceneSwitcherService = sceneSwitcherService;
             _coroutinesPerformer = coroutinesPerformer;
-            
         }
+
         public void Initialize()
         {
             _screen.ResetStatisticsButtonClicked += OnResetStatisticsButtonClick;

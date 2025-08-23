@@ -1,11 +1,10 @@
 ﻿using Assets._Project.Develop.Runtime.Configs.Gameplay;
-using Assets._Project.Develop.Runtime.Gameplay.Core;
+using Assets._Project.Develop.Runtime.Gameplay.Utils;
 using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilitis.ConfigsManagment;
 using Assets._Project.Develop.Runtime.Utilitis.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilitis.SceneManagment;
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -35,7 +34,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
             //_inputArgs = gameplayInputArgs;
 
-            GameplayContextRegistrations.Process(_projectContainer);
+            GameplayContextRegistrations.Process(_projectContainer, _updateService);
         }
 
         public override IEnumerator Initialize()
@@ -58,7 +57,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
             _coroutinesPerformer.StartPerform(_gameplayCycle.Launch());
 
-            _updateService.Initialize(_gameplayCycle);
+            _updateService.AddUpdatableService(_gameplayCycle);
 
             Debug.Log("Старт геймплейной сцены");
         }

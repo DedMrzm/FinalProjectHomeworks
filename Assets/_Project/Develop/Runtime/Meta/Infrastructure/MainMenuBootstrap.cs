@@ -46,19 +46,18 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         private void Update()
         {
-
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
-                ICoroutinesPerformer coroutinesPerfomer = _container.Resolve<ICoroutinesPerformer>();
-                coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(GameModes.Chars, _container.Resolve<ConfigsProviderService>().GetConfig<GameModeConfig>().CountOfGeneratedSymbols)));
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
-                ICoroutinesPerformer coroutinesPerfomer = _container.Resolve<ICoroutinesPerformer>();
-                coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(GameModes.Digits, _container.Resolve<ConfigsProviderService>().GetConfig<GameModeConfig>().CountOfGeneratedSymbols)));
-            }
+            //if (Input.GetKeyDown(KeyCode.Alpha1))
+            //{
+            //    SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
+            //    ICoroutinesPerformer coroutinesPerfomer = _container.Resolve<ICoroutinesPerformer>();
+            //    coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(GameModes.Chars, _container.Resolve<ConfigsProviderService>().GetConfig<GameModeConfig>().CountOfGeneratedSymbols)));
+            //}
+            //if (Input.GetKeyDown(KeyCode.Alpha2))
+            //{
+            //    SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
+            //    ICoroutinesPerformer coroutinesPerfomer = _container.Resolve<ICoroutinesPerformer>();
+            //    coroutinesPerfomer.StartPerform(sceneSwitcherService.ProcessSwitchTo(Scenes.Gameplay, new GameplayInputArgs(GameModes.Digits, _container.Resolve<ConfigsProviderService>().GetConfig<GameModeConfig>().CountOfGeneratedSymbols)));
+            //}
 
             if (Input.GetKeyDown(KeyCode.S))
             {

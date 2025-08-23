@@ -8,5 +8,7 @@
         public const string OneStatisticView = nameof(OneStatisticView);
         public const string GameplayScreenView = nameof(GameplayScreenView);
         public const string GameplayUIRoot = nameof(GameplayUIRoot);
+        public const string InputTextView = nameof(InputTextView);
+        public const string CorrectAnswerView = nameof(CorrectAnswerView);
     }
 }

@@ -1,6 +1,6 @@
 using Assets._Project.Develop.Runtime.Configs.Meta.Wallet;
-using Assets._Project.Develop.Runtime.Gameplay;
 using Assets._Project.Develop.Runtime.Gameplay.Core;
+using Assets._Project.Develop.Runtime.Gameplay.Utils;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
@@ -31,6 +31,8 @@ public class GameplayCycle : IUpdatable
     private StatisticsService _statisticsService;
     private StartGameModeRulesConfig _rulesConfig;
     private ConfigsProviderService _configsProviderService;
+    private InputTextService _inputService;
+    private TutorialService _tutorialService;
 
     private string _correctAnswer;
     private int _counter = 0;
@@ -48,6 +50,8 @@ public class GameplayCycle : IUpdatable
         _coroutinesPerformer = _gameplayContainer.Resolve<ICoroutinesPerformer>();
         _configsProviderService = _gameplayContainer.Resolve<ConfigsProviderService>();
         _statisticsService = _gameplayContainer.Resolve<StatisticsService>();
+        _inputService = _gameplayContainer.Resolve<InputTextService>();
+        _tutorialService = _gameplayContainer.Resolve<TutorialService>();
 
         _rulesConfig = _configsProviderService.GetConfig<StartGameModeRulesConfig>();
     }
@@ -69,13 +73,11 @@ public class GameplayCycle : IUpdatable
             return;
         }
 
-        if (Input.inputString == _correctAnswer[_counter].ToString())
+        if (_inputService.CurrentSymbol == _correctAnswer[_counter].ToString())
         {
             Debug.Log("Right");
             _counter++;
         }
-
-        //Debug.Log($"Counter: {_counter}\nCorrectAnswerLength {_correctAnswer.Length}");
     }
 
     public IEnumerator Launch()
@@ -83,16 +85,20 @@ public class GameplayCycle : IUpdatable
         _counter = 0;
 
         _correctAnswer = _generator.Generate();
+        //Debug.Log("Правильный ответ: " + _correctAnswer);
 
         yield return new WaitForSeconds(0.5f);
 
-        _isRunning = true;
+        _inputService.Enable();
 
-        Debug.Log("ISRUNNING: " + _isRunning);
+        _isRunning = true;
     }
 
     public void ProcessEndGame()
-        => _isRunning = false;
+    {
+        _isRunning = false;
+        _inputService.Disable();
+    }
 
     public IEnumerator ProcessDefeat()
     {
@@ -101,6 +107,8 @@ public class GameplayCycle : IUpdatable
 
         _walletService.Waste(CurrencyTypes.Gold, _rulesConfig.CostOfLose);
         _statisticsService.ProcessDefeat();
+
+        _tutorialService.StartDefeatTutorial();
 
         Debug.Log($"Сейчас у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота");
 
@@ -116,27 +124,25 @@ public class GameplayCycle : IUpdatable
     public IEnumerator ProcessWin()
     {
         ProcessEndGame();
-        Debug.Log("Отлично, ты выиграл!");
 
         _walletService.Add(CurrencyTypes.Gold, _rulesConfig.PrizeForWin);
         _statisticsService.ProcessWin();
 
-        Debug.Log($"Сейчас у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота");
+        _tutorialService.StartWinTutorial();
 
-        Debug.Log($"Нажми {GoToMenuCode} чтобы перейти в главное меню");
-
-        yield return new WaitWhile(() => Input.GetKeyDown(GoToMenuCode) == false);
-
-        Debug.Log("Переход на меню");
+        yield return new WaitWhile(() => Input.anyKey == false);
 
         _coroutinesPerformer.StartPerform(_sceneSwitcher.ProcessSwitchTo(Scenes.MainMenu));
     }
 
+    //Пока в кондишинах решил обойтись без абстракций, написать об этом Илье
     public bool WinConditionsCompleted(int counter)
         => counter > _correctAnswer.Length - 1;
 
     public bool DefeatConditionsCompleted(int counter)
-     => Input.inputString != _correctAnswer[counter].ToString() && Input.inputString != "";
+     => _inputService.CurrentSymbol != _correctAnswer[counter].ToString()
+        && _inputService.InputedText.Length >= _correctAnswer.Length;
+
 
 
 }

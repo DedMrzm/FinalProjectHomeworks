@@ -1,4 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.UI.Core;
+using Assets._Project.Develop.Runtime.UI.Gameplay.CymbolGenerator;
+using Assets._Project.Develop.Runtime.UI.Gameplay.InputHandler;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,6 +29,10 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         {
             _correctAnswerText.text = text;
         }
+
+        [field: SerializeField] public InputTextHandlerView InputView { get; private set; }
+
+        [field: SerializeField] public CorrectAnswerView CorrectAnswerView { get; private set; }
 
         private void OnEnable()
         {

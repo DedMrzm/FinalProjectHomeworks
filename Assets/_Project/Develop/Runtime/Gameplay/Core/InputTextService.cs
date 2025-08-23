@@ -61,8 +61,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
             if(_isRunning ==  false)
                 return;
 
-            Debug.Log(_inputedText);
-
             InputSymbol();
         }
     }

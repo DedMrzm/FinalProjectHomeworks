@@ -9,17 +9,10 @@ using Assets._Project.Develop.Runtime.Utilitis.CoroutinesManagment;
 using Assets._Project.Develop.Runtime.Utilitis.DataManagment.DataProviders;
 using Assets._Project.Develop.Runtime.Utilitis.SceneManagment;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class GameplayCycle : IUpdatable
 {
-    private const KeyCode NextCode = KeyCode.Space;
-    private const KeyCode RestartCode = KeyCode.Space;
-    private const KeyCode GoToMenuCode = KeyCode.Space;
-
     private DIContainer _gameplayContainer;
 
     private SymbolsGenerator _generator;
@@ -82,6 +75,8 @@ public class GameplayCycle : IUpdatable
 
     public IEnumerator Launch()
     {
+        _tutorialService.StartBeginnerTutorial();
+
         _counter = 0;
 
         _correctAnswer = _generator.Generate();
@@ -103,20 +98,11 @@ public class GameplayCycle : IUpdatable
     public IEnumerator ProcessDefeat()
     {
         ProcessEndGame();
-        Debug.Log("Неправильно, проиграл");
 
         _walletService.Waste(CurrencyTypes.Gold, _rulesConfig.CostOfLose);
         _statisticsService.ProcessDefeat();
 
-        _tutorialService.StartDefeatTutorial();
-
-        Debug.Log($"Сейчас у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота");
-
-        Debug.Log($"Нажми {RestartCode} чтобы начать заново");
-
-        yield return new WaitWhile(() => Input.GetKeyDown(RestartCode) == false);
-
-        Debug.Log("Рестарт!");
+        yield return _coroutinesPerformer.StartPerform(_tutorialService.StartDefeatTutorial());
 
         _coroutinesPerformer.StartPerform(Launch());
     }
@@ -128,14 +114,11 @@ public class GameplayCycle : IUpdatable
         _walletService.Add(CurrencyTypes.Gold, _rulesConfig.PrizeForWin);
         _statisticsService.ProcessWin();
 
-        _tutorialService.StartWinTutorial();
+        yield return _coroutinesPerformer.StartPerform(_tutorialService.StartWinTutorial());
 
-        yield return new WaitWhile(() => Input.anyKey == false);
-
-        _coroutinesPerformer.StartPerform(_sceneSwitcher.ProcessSwitchTo(Scenes.MainMenu));
+        _coroutinesPerformer.StartPerform(Launch());
     }
 
-    //Пока в кондишинах решил обойтись без абстракций, написать об этом Илье
     public bool WinConditionsCompleted(int counter)
         => counter > _correctAnswer.Length - 1;
 

@@ -33,6 +33,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         [field: SerializeField] public InputTextHandlerView InputView { get; private set; }
 
         [field: SerializeField] public CorrectAnswerView CorrectAnswerView { get; private set; }
+        [field: SerializeField] public TutorialView TutorialView { get; private set; }
 
         private void OnEnable()
         {

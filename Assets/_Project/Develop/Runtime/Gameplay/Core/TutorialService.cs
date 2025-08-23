@@ -18,14 +18,22 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
         //public event Action DefeatTutorialStarted;
         //public event Action WinTutorialStarted;
 
+        private const KeyCode NextCode = KeyCode.Space;
+        private const KeyCode RestartCode = KeyCode.Space;
+        private const KeyCode GoToMenuCode = KeyCode.Space;
+
         private WalletService _walletService;
         private ICoroutinesPerformer _coroutinesPerformer;
 
-        private float _delay = 0.05f;
+        private float _delay = 0.02f;
 
         private readonly string DefeatTutorial;
         private readonly string BeginnerTutorial = "Введи такие же символы, что и внизу";
-        private readonly string WinTutorial; 
+        private readonly string WinTutorial;
+
+        private bool _beginnerTutorialPassed = false;
+
+        private Coroutine _currentProcess;
 
         public TutorialService(WalletService walletService, ICoroutinesPerformer coroutinesPerformer)
         {
@@ -34,38 +42,54 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Core
 
             WinTutorial = $"Поздравляю, ты выиграл!" +
                 $"\nТеперь у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота" +
-                $"\nНажми на любую клавишу, чтобы сыграть снова!";
+                $"\nНажми на {KeyCode.Space}, чтобы сыграть снова!";
             DefeatTutorial = $"" +
                 $"Ты проиграл :(" +
                 $"\n Теперь у тебя {_walletService.GetCurrency(CurrencyTypes.Gold).Value} золота" +
-                $"\nНажми на любую клавишу, чтобы попробовать снова!";
+                $"\nНажми на {KeyCode.Space}, чтобы попробовать снова!";
         }
 
-        public IEnumerator InputTextWithDelay(float delay, string text)
+        public IEnumerator InputTextWithDelay(float delay, string text, bool isInstantly = false)
         {
-            foreach (char c in text)
-            {
-                TextInputed?.Invoke(c.ToString());
-                yield return new WaitForSeconds(delay);
-            }
+            if(isInstantly == false)
+                foreach (char c in text)
+                {
+                    TextInputed?.Invoke(c.ToString());
+                    yield return new WaitForSeconds(delay);
+                }
+            else
+                TextInputed?.Invoke(text);
         }
 
         public void StartBeginnerTutorial()
         {
-            TextCleared?.Invoke();
-            _coroutinesPerformer.StartPerform(InputTextWithDelay(_delay, BeginnerTutorial));
+            ClearProcessFlow();
+            _currentProcess = _coroutinesPerformer.StartPerform(InputTextWithDelay(_delay, BeginnerTutorial, _beginnerTutorialPassed));
+            _beginnerTutorialPassed = true;
         }
 
-        public void StartDefeatTutorial()
+        public IEnumerator StartDefeatTutorial()
         {
-            TextCleared?.Invoke();
-            _coroutinesPerformer.StartPerform(InputTextWithDelay(_delay, DefeatTutorial));
+            ClearProcessFlow();
+            _currentProcess = _coroutinesPerformer.StartPerform(InputTextWithDelay(_delay, DefeatTutorial));
+
+            yield return new WaitWhile(() => Input.GetKeyDown(RestartCode) == false);
         }
 
-        public void StartWinTutorial()
+        public IEnumerator StartWinTutorial()
         {
+            ClearProcessFlow();
+             _currentProcess = _coroutinesPerformer.StartPerform(InputTextWithDelay(_delay, WinTutorial));
+
+            yield return new WaitWhile(() => Input.GetKeyDown(RestartCode) == false);
+        }
+
+        private void ClearProcessFlow()
+        {
+            if (_currentProcess != null)
+                _coroutinesPerformer.StopPerform(_currentProcess);
+
             TextCleared?.Invoke();
-            _coroutinesPerformer.StartPerform(InputTextWithDelay(_delay, WinTutorial));
         }
     }
 }

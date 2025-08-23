@@ -78,7 +78,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
                 c.Resolve<SceneSwitcherService>(),
                 c.Resolve<GameplayPresentersFactory>(),
                 c.Resolve<SymbolsGenerator>(),
-                _updateService);
+                _updateService,
+                c.Resolve<TutorialService>());
 
             return presenter;
         }

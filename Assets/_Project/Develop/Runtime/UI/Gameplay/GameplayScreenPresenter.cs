@@ -20,6 +20,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
         private readonly SceneSwitcherService _sceneSwitcherService;
         private readonly GameplayPresentersFactory _gameplayPresentersFactory;
         private readonly SymbolsGenerator _symbolsGenerator;
+        private readonly TutorialService _tutorialService;
         private readonly ICoroutinesPerformer _coroutinesPerformer;
 
         private readonly List<IPresenter> _childPresenters = new();
@@ -30,13 +31,15 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
             SceneSwitcherService sceneSwitcherService,
             GameplayPresentersFactory gameplayPresentersFactory,
             SymbolsGenerator symbolsGenerator,
-            UpdateService updateService)
+            UpdateService updateService,
+            TutorialService tutorialService)
         {
             _screen = screen;
             _coroutinesPerformer = coroutinesPerformer;
             _sceneSwitcherService = sceneSwitcherService;
             _gameplayPresentersFactory = gameplayPresentersFactory;
             _symbolsGenerator = symbolsGenerator;
+            _tutorialService = tutorialService;
         }
         public void Initialize()
         {
@@ -44,6 +47,7 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
 
             CreateCorrectAnswerPresenter();
             CreateInputTextHandlerPresenter();
+            ConnectTutorialParts();
 
             foreach (IPresenter presenter in _childPresenters)
                 presenter.Initialize();
@@ -57,6 +61,11 @@ namespace Assets._Project.Develop.Runtime.UI.Gameplay
                 presenter.Dispose();
 
             _childPresenters.Clear();
+        }
+
+        private void ConnectTutorialParts()
+        {
+            _screen.TutorialView.Initialize(_tutorialService);
         }
 
         private void CreateCorrectAnswerPresenter()
